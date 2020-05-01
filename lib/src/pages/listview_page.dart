@@ -73,7 +73,12 @@ class _ListaPageState extends State<ListaPage> {
   }
 
   Widget _crearLista(){
-    return ListView.builder(
+    // Implementando RefreshIndicator para cuando el scroll hvaya para arriba refresque información
+    return RefreshIndicator(
+
+      onRefresh: obtenerPagina1,
+
+      child: ListView.builder(
       // Controlando scroll
       controller: _scrollController,
       itemCount: _listaNumeros.length,
@@ -89,10 +94,26 @@ class _ListaPageState extends State<ListaPage> {
           height: 300,
         );
       },
+    ),
     );
   }
+
+  Future<Null> obtenerPagina1() async {
+
+    final duration = new Duration(seconds: 2);
+    new Timer( duration,  () {
+      _listaNumeros.clear();
+      _ultmoItem++;
+      _agregar10();
+    });
+
+    // Para esperar el tiempo de duration
+    return Future.delayed(duration);
+
+  }
+
   // Al llamar al método, agrega 10 imagenes a la lista
-  _agregar10() {
+  void _agregar10() {
 
 
     setState(() {
